@@ -3,8 +3,8 @@ const loggerResult = document.querySelector('#list');
 function Logger(logString: string) {
   createLogs('Log Factory')
   return (constructor: Function) => {
-    createLogs(`Logger String: ${logString}`);
-    createLogs(`Constructor Logger: ${constructor.toString()}`);
+    createLogs({ label: 'Logger String', value: logString });
+    createLogs({ label: 'Constructor Logger', value: constructor });
   };
 }
 
@@ -39,19 +39,19 @@ class Person {
 }
 
 const pers = new Person();
-createLogs(`Person: ${JSON.stringify(pers)}`);
+createLogs({ label: 'Person', value: pers });
 
 function Log(target: any, propertyName: string | Symbol) {
   createLogs('Property decorator!');
-  createLogs(`Target: ${JSON.stringify(target)}`);
-  createLogs(`Property Name: ${propertyName}`);
+  createLogs({ label: 'Target', value: target });
+  createLogs({ label: 'Property Name', value: propertyName });
 }
 
 function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
   createLogs('Accessor decorator Log2!');
-  createLogs(`Target Log2: ${JSON.stringify(target)}`);
-  createLogs(`Name Log2: ${name}`);
-  createLogs(`Property Descriptor Log2: ${JSON.stringify(descriptor)}`);
+  createLogs({ label: 'Target Log2', value: target });
+  createLogs({ label: 'Name Log2', value: name });
+  createLogs({ label: 'Property Descriptor Log2', value: descriptor });
 }
 
 function Log3(
@@ -60,16 +60,16 @@ function Log3(
   descriptor: PropertyDescriptor
 ) {
   createLogs('Method decorator Log3!');
-  createLogs(`Target Log3: ${JSON.stringify(target)}`);
-  createLogs(`Name Log3: ${name.toString()}`);
-  createLogs(`Property Descriptor Log3: ${JSON.stringify(descriptor)}`);
+  createLogs({ label: 'Target Log3', value: target });
+  createLogs({ label: 'Name Log3', value: name });
+  createLogs({ label: 'Property Descriptor Log3', value: descriptor });
 }
 
 function Log4(target: any, name: string | Symbol, position: number) {
   createLogs('Parameter decorator Log4!');
-  createLogs(`Target Log4: ${JSON.stringify(target)}`);
-  createLogs(`Name Log4: ${name.toString()}`);
-  createLogs(`Position Log4: ${position}`);
+  createLogs({ label: 'Target Log4', value: target });
+  createLogs({ label: 'Name Log4', value: name });
+  createLogs({ label: 'Position Log4', value: position });
 }
 
 class Product {
@@ -82,7 +82,7 @@ class Product {
     if (val > 0) {
       this._price = val;
     } else {
-      throw new Error('Invalid price - should be positive!');
+      createLogs('Product Price: Invalid price - should be positive!');
     }
   }
 
@@ -118,7 +118,7 @@ class Printer {
 
   @Autobind
   showMessage() {
-    createLogs(`Message Printer: ${this.message}`);
+    createLogs({ label: 'Message Printer', value: this.message });
   }
 }
 
@@ -188,25 +188,44 @@ courseForm.addEventListener('submit', event => {
   event.preventDefault();
   const titleEl = document.getElementById('title') as HTMLInputElement;
   const priceEl = document.getElementById('price') as HTMLInputElement;
-
   const title = titleEl.value;
   const price = +priceEl.value;
-
   const createdCourse = new Course(title, price);
 
   if (!validate(createdCourse)) {
-    createLogs('Submit: Invalid input, please try again!');
+    createLogs({ label: 'Submit: Invalid input, please try again!', value: createdCourse });
     return;
   }
-  createLogs(`Submit: ${JSON.stringify(createdCourse)}`);
+  createLogs({ label: 'Submit', value: createdCourse });
 });
 
-function createLogs(logString: string) {
+function createLogs(log: string | object | { label: string; value: object }) {
   const li = document.createElement('li');
-  const timeStamp = `${getTimeStamp()}`;
-  li.textContent = `${timeStamp} - ${logString}`;
+  const timeStamp = getTimeStamp();
+  const timeSpan = document.createElement('span');
+  timeSpan.textContent = `${timeStamp} - `;
+  li.appendChild(timeSpan);
+
+  if (typeof log === 'object') {
+    if ('label' in log && 'value' in log) {
+      const labelSpan = document.createElement('span');
+      labelSpan.textContent = `${log.label}: `;
+      li.appendChild(labelSpan);
+      const pre = document.createElement('pre');
+      pre.textContent = JSON.stringify(log.value, null, 2);
+      li.appendChild(pre);
+    } else {
+      const pre = document.createElement('pre');
+      pre.textContent = JSON.stringify(log, null, 2);
+      li.appendChild(pre);
+    }
+  } else {
+    const textNode = document.createTextNode(log);
+    li.appendChild(textNode);
+  }
   loggerResult?.appendChild(li);
 }
+
 
 function getTimeStamp() {
   const now = new Date();
