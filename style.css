@@ -38,4 +38,53 @@ body {
 ul {
 	height: calc(100% - 7rem);
 	overflow: auto;
+	list-style: none;
+}
+
+li {
+	background: #ffffff91;
+	display: flex;
+	width: 95%;
+	padding: 1rem;
+	border-radius: 12px;
+	box-sizing: border-box;
+	margin: 0.8rem 0 0;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.details-container {
+	display: flex;
+	align-items: center;
+	gap: 3rem;
+	width: 90%;
+}
+
+.details-container span {
+	width: 10rem;
+}
+
+pre {
+	background: #d3d3d378;
+	padding: 1rem;
+	width: calc(100% - 12rem);
+}
+
+::-webkit-scrollbar {
+	height: 0.563rem;
+	width: 0.563rem;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #d3d3d3;
+	width: 0.563rem;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+	width: 0.563rem;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
 }

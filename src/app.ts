@@ -203,37 +203,42 @@ function createLogs(log: string | object | { label: string; value: object }) {
   const li = document.createElement('li');
   const timeStamp = getTimeStamp();
   const timeSpan = document.createElement('span');
-  timeSpan.textContent = `${timeStamp} - `;
-  li.appendChild(timeSpan);
+  timeSpan.textContent = `${timeStamp}`;
+  const container = document.createElement('div');
+  container.className = 'details-container';
 
   if (typeof log === 'object') {
     if ('label' in log && 'value' in log) {
       const labelSpan = document.createElement('span');
       labelSpan.textContent = `${log.label}: `;
-      li.appendChild(labelSpan);
+      container.appendChild(labelSpan);
+
       const pre = document.createElement('pre');
       pre.textContent = JSON.stringify(log.value, null, 2);
-      li.appendChild(pre);
+      container.appendChild(pre);
     } else {
       const pre = document.createElement('pre');
       pre.textContent = JSON.stringify(log, null, 2);
-      li.appendChild(pre);
+      container.appendChild(pre);
     }
   } else {
     const textNode = document.createTextNode(log);
-    li.appendChild(textNode);
+    container.appendChild(textNode);
   }
+
+  li.appendChild(container);
+  li.appendChild(timeSpan);
   loggerResult?.appendChild(li);
 }
 
-
 function getTimeStamp() {
   const now = new Date();
-  const day = now.getDate();
-  const month = now.getMonth() + 1;
-  const year = now.getFullYear();
+  // const day = now.getDate();
+  // const month = now.getMonth() + 1;
+  // const year = now.getFullYear();
   const hours = now.getHours();
   const minutes = now.getMinutes();
-  const formatted = `${day}-${month}-${year} ${hours}:${minutes}`;
+  const seconds = now.getSeconds();
+  const formatted = `${hours}:${minutes}:${seconds}`;
   return formatted;
 }
