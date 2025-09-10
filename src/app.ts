@@ -31,7 +31,7 @@ function WithTemplate(template: string, hookId: string) {
 @Logger('LOGGING')
 @WithTemplate('<h1>My Person Object</h1>', 'app')
 class Person {
-  name = 'Name String';
+  name = 'Person Name';
 
   constructor() {
     createLogs('Constructor: Creating person object...');
@@ -125,7 +125,7 @@ class Printer {
 const p = new Printer();
 p.showMessage();
 
-const button = document.querySelector('button')!;
+const button = document.querySelector('#message-button')!;
 button.addEventListener('click', p.showMessage);
 
 // ---
@@ -236,9 +236,10 @@ function getTimeStamp() {
   // const day = now.getDate();
   // const month = now.getMonth() + 1;
   // const year = now.getFullYear();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
+  const pad = (num: number) => num.toString().padStart(2, '0');
+  const hours = pad(now.getHours());
+  const minutes = pad(now.getMinutes());
+  const seconds = pad(now.getSeconds());
   const formatted = `${hours}:${minutes}:${seconds}`;
   return formatted;
 }
