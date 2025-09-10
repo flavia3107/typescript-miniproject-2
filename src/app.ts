@@ -1,23 +1,22 @@
 const loggerResult = document.querySelector('#list');
 
-
 function Logger(logString: string) {
   createLogs('Log Factory')
   return (constructor: Function) => {
-    createLogs(logString);
-    createLogs(constructor.toString());
+    createLogs(`Logger String: ${logString}`);
+    createLogs(`Constructor Logger: ${constructor.toString()}`);
   };
 }
 
 function WithTemplate(template: string, hookId: string) {
-  console.log('TEMPLATE FACTORY');
+  createLogs('Template Factory');
   return function <T extends { new(...args: any[]): { name: string } }>(
     originalConstructor: T
   ) {
     return class extends originalConstructor {
       constructor(..._: any[]) {
         super();
-        console.log('Rendering template');
+        createLogs('Rendering template');
         const hookEl = document.getElementById(hookId);
         if (hookEl) {
           hookEl.innerHTML = template;
@@ -32,29 +31,27 @@ function WithTemplate(template: string, hookId: string) {
 @Logger('LOGGING')
 @WithTemplate('<h1>My Person Object</h1>', 'app')
 class Person {
-  name = 'Max';
+  name = 'Name String';
 
   constructor() {
-    console.log('Creating person object...');
+    createLogs('Constructor: Creating person object...');
   }
 }
 
 const pers = new Person();
-
-console.log(pers);
-
-// ---
+createLogs(`Person: ${JSON.stringify(pers)}`);
 
 function Log(target: any, propertyName: string | Symbol) {
-  console.log('Property decorator!');
-  console.log(target, propertyName);
+  createLogs('Property decorator!');
+  createLogs(`Target: ${JSON.stringify(target)}`);
+  createLogs(`Property Name: ${propertyName}`);
 }
 
 function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
-  console.log('Accessor decorator!');
-  console.log(target);
-  console.log(name);
-  console.log(descriptor);
+  createLogs('Accessor decorator Log2!');
+  createLogs(`Target Log2: ${JSON.stringify(target)}`);
+  createLogs(`Name Log2: ${name}`);
+  createLogs(`Property Descriptor Log2: ${JSON.stringify(descriptor)}`);
 }
 
 function Log3(
@@ -62,17 +59,17 @@ function Log3(
   name: string | Symbol,
   descriptor: PropertyDescriptor
 ) {
-  console.log('Method decorator!');
-  console.log(target);
-  console.log(name);
-  console.log(descriptor);
+  createLogs('Method decorator Log3!');
+  createLogs(`Target Log3: ${JSON.stringify(target)}`);
+  createLogs(`Name Log3: ${name.toString()}`);
+  createLogs(`Property Descriptor Log3: ${JSON.stringify(descriptor)}`);
 }
 
 function Log4(target: any, name: string | Symbol, position: number) {
-  console.log('Parameter decorator!');
-  console.log(target);
-  console.log(name);
-  console.log(position);
+  createLogs('Parameter decorator Log4!');
+  createLogs(`Target Log4: ${JSON.stringify(target)}`);
+  createLogs(`Name Log4: ${name.toString()}`);
+  createLogs(`Position Log4: ${position}`);
 }
 
 class Product {
@@ -121,7 +118,7 @@ class Printer {
 
   @Autobind
   showMessage() {
-    console.log(this.message);
+    createLogs(`Message Printer: ${this.message}`);
   }
 }
 
@@ -138,9 +135,7 @@ interface ValidatorConfig {
     [validatableProp: string]: string[]; // ['required', 'positive']
   };
 }
-
 const registeredValidators: ValidatorConfig = {};
-
 function Required(target: any, propName: string) {
   registeredValidators[target.constructor.name] = {
     ...registeredValidators[target.constructor.name],
@@ -200,14 +195,26 @@ courseForm.addEventListener('submit', event => {
   const createdCourse = new Course(title, price);
 
   if (!validate(createdCourse)) {
-    alert('Invalid input, please try again!');
+    createLogs('Submit: Invalid input, please try again!');
     return;
   }
-  console.log(createdCourse);
+  createLogs(`Submit: ${JSON.stringify(createdCourse)}`);
 });
 
 function createLogs(logString: string) {
   const li = document.createElement('li');
-  li.textContent = logString;
+  const timeStamp = `${getTimeStamp()}`;
+  li.textContent = `${timeStamp} - ${logString}`;
   loggerResult?.appendChild(li);
+}
+
+function getTimeStamp() {
+  const now = new Date();
+  const day = now.getDate();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const formatted = `${day}-${month}-${year} ${hours}:${minutes}`;
+  return formatted;
 }
