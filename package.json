@@ -1,17 +1,19 @@
 {
-  "name": "understanding-typescript",
+  "name": "typescript-miniproject-2",
   "version": "1.0.0",
-  "description": "Understanding TypeScript Course Setup",
+  "description": "A minimal TypeScript + Vite project deployed on GitHub Pages",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [
     "typescript",
-    "course"
+    "vite",
+    "gh-pages"
   ],
   "license": "ISC",
   "devDependencies": {
