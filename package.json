@@ -2,21 +2,21 @@
   "name": "understanding-typescript",
   "version": "1.0.0",
   "description": "Understanding TypeScript Course Setup",
-  "main": "app.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "start": "lite-server"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "keywords": [
     "typescript",
     "course"
   ],
-  "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.5.4",
-    "typescript": "^5.9.2"
+    "gh-pages": "^6.3.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5"
   }
 }
