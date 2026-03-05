@@ -58,7 +58,7 @@ li {
 	margin: 0.8rem 0 0;
 	justify-content: space-between;
 	align-items: center;
-	min-width: 33rem;
+	min-width: 33.5rem;
 }
 
 .details-container {
@@ -76,7 +76,7 @@ pre {
 	background: #d3d3d378;
 	padding: 1rem;
 	width: calc(100% - 12rem);
-	margin-right: 1.5rem;
+	margin-right: 1rem;
 }
 
 input {
